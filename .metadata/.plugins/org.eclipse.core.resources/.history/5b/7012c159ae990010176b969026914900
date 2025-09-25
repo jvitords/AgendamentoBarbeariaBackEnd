@@ -1,0 +1,17 @@
+package com.barbearia.barbearia.domain.cliente;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.barbearia.barbearia.infraestrutura.repository.ClienteRepositoryJpa;
+
+@Service
+public class ClienteService {
+	
+	@Autowired
+	private ClienteRepositoryJpa clienteRepositoryJpa;
+
+	public ClienteService(ClienteRepositoryJpa clienteRepositoryJpa){
+		this.clienteRepositoryJpa = clienteRepositoryJpa;
+	}
+}

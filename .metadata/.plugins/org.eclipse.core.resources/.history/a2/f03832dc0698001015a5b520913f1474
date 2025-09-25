@@ -1,0 +1,5 @@
+package com.barbearia.barbearia.cliente;
+
+public class Cliente {
+
+}

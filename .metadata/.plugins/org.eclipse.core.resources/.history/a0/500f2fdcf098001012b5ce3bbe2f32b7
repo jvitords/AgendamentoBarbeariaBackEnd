@@ -1,0 +1,36 @@
+package com.barbearia.barbearia.domain.agendamento;
+
+import java.time.LocalDateTime;
+
+import com.barbearia.barbearia.domain.barbearia.Barbearia;
+import com.barbearia.barbearia.domain.cliente.Cliente;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "agendamentos")
+public class Agendamento {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private LocalDateTime dataHora;
+    
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+    
+    @ManyToOne
+    @JoinColumn(name = "barbearia_id")
+    private Barbearia barbearia;
+
+    public Agendamento(LocalDateTime dataHora) {
+        this.dataHora = dataHora;
+    }
+}

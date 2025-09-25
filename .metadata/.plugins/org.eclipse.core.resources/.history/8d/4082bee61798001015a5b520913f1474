@@ -1,0 +1,5 @@
+package com.barbearia.barbearia.agendamento;
+
+public class CancelarAgendamentoHandler {
+
+}

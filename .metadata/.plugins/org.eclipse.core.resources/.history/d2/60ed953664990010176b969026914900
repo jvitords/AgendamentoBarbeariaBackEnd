@@ -1,0 +1,70 @@
+package com.barbearia.barbearia.infraestrutura.config;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+
+import com.barbearia.barbearia.domain.agendamento.Agendamento;
+import com.barbearia.barbearia.domain.agendamento.AgendamentoRepository;
+import com.barbearia.barbearia.domain.barbearia.Barbearia;
+import com.barbearia.barbearia.domain.barbearia.BarbeariaRepository;
+import com.barbearia.barbearia.domain.barbearia.Servico;
+import com.barbearia.barbearia.domain.barbearia.ServicoRepository;
+import com.barbearia.barbearia.domain.cliente.Cliente;
+import com.barbearia.barbearia.domain.cliente.ClienteRepository;
+import com.barbearia.barbearia.infraestrutura.repository.AgendamentoRepositoryJpa;
+import com.barbearia.barbearia.infraestrutura.repository.BarbeariaRepositoryJpa;
+import com.barbearia.barbearia.infraestrutura.repository.ClienteRepositoryJpa;
+import com.barbearia.barbearia.infraestrutura.repository.ServicoRepositoryJpa;
+
+
+@Configuration
+public class TestConfiguration {
+	
+    @Autowired
+    private ClienteRepositoryJpa clienteRepository;
+    @Autowired
+    private BarbeariaRepositoryJpa barbeariaRepository;
+    @Autowired
+    private ServicoRepositoryJpa servicoRepository;
+    @Autowired
+    private AgendamentoRepositoryJpa agendamentoRepository;
+	
+    public void run(String... args) throws Exception {
+
+        // Criar clientes
+        Cliente cliente1 = new Cliente("João Vitor", "joao@email.com", "99999-0000");
+        Cliente cliente2 = new Cliente("Maria Silva", "maria@email.com", "98888-1111");
+
+        clienteRepository.saveAll(List.of(cliente1, cliente2));
+
+        // Criar barbearias
+        Barbearia barbearia1 = new Barbearia("Barbearia Estilo", "Rua A, 123", "3333-4444");
+        Barbearia barbearia2 = new Barbearia("Barbearia Premium", "Av. B, 456", "5555-6666");
+
+        barbeariaRepository.saveAll(List.of(barbearia1, barbearia2));
+
+        // Criar serviços
+        Servico servico1 = new Servico("Corte de cabelo", 30.0, 30);
+        Servico servico2 = new Servico("Barba", 20.0, 20);
+        Servico servico3 = new Servico("Corte + Barba", 45.0, 50);
+
+        servicoRepository.saveAll(List.of(servico1, servico2, servico3));
+
+        // Criar agendamentos
+        Agendamento agendamento1 = new Agendamento(LocalDateTime.of(2025, 9, 25, 10, 0));
+        agendamento1.setCliente(cliente1);
+        agendamento1.setBarbearia(barbearia1);
+        agendamento1.getServicos().add(servico1); // Corte de cabelo
+        agendamento1.getServicos().add(servico2); // Barba
+
+        Agendamento agendamento2 = new Agendamento(LocalDateTime.of(2025, 9, 25, 14, 0));
+        agendamento2.setCliente(cliente2);
+        agendamento2.setBarbearia(barbearia2);
+        agendamento2.getServicos().add(servico3); // Corte + Barba
+
+        agendamentoRepository.saveAll(List.of(agendamento1, agendamento2));
+}
+}

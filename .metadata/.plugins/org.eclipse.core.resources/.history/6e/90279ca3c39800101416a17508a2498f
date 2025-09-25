@@ -1,0 +1,5 @@
+package com.barbearia.barbearia.infraestrutura.repository;
+
+public interface BarbeariaRepositoryJpa {
+
+}

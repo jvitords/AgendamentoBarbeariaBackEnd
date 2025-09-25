@@ -1,0 +1,16 @@
+package com.barbearia.barbearia.domain.agendamento;
+
+@Entity
+@Table(name = "agendamentos")
+public class Agendamento {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private LocalDateTime dataHora;
+
+    public Agendamento(LocalDateTime dataHora) {
+        this.dataHora = dataHora;
+    }
+}

@@ -1,0 +1,15 @@
+# Configuração do banco H2
+spring.datasource.url=jdbc:h2:mem:barbeariaDB
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+# Dialeto do Hibernate para H2
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+
+# Criar as tabelas automaticamente (opções: none, validate, update, create, create-drop)
+spring.jpa.hibernate.ddl-auto=update
+
+# Console do H2 habilitado
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console

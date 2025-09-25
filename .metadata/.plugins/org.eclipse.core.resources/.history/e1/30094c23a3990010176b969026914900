@@ -1,0 +1,6 @@
+package com.barbearia.barbearia.application.cliente.dto;
+
+public record ClientePostDTO(
+		String nome, String telefone, String email, String password) {
+
+}

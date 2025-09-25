@@ -1,0 +1,23 @@
+package com.barbearia.barbearia.infraestrutura.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+
+
+@Configuration
+public class TestConfiguration {
+	
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private BarbeariaRepository barbeariaRepository;
+
+    @Autowired
+    private ServicoRepository servicoRepository;
+
+    @Autowired
+    private AgendamentoRepository agendamentoRepository;
+	
+}

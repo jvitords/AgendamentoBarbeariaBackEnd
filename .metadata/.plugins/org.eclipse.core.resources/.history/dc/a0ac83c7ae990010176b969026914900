@@ -1,0 +1,23 @@
+package com.barbearia.barbearia.domain.cliente;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.barbearia.barbearia.application.cliente.dto.ClienteMapper;
+import com.barbearia.barbearia.application.cliente.dto.ClientePostDTO;
+import com.barbearia.barbearia.infraestrutura.repository.ClienteRepositoryJpa;
+
+@Service
+public class ClienteService {
+	
+	@Autowired
+	private ClienteRepositoryJpa clienteRepositoryJpa;
+
+	public ClienteService(ClienteRepositoryJpa clienteRepositoryJpa){
+		this.clienteRepositoryJpa = clienteRepositoryJpa;
+	}
+	
+	public void cadastrarCliente(ClientePostDTO cliente) {
+		clienteRepositoryJpa.findByEmail(ClienteMapper.toEntity(cliente));
+	}
+}
