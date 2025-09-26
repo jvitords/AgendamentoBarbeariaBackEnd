@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.barbearia.barbearia.application.cliente.dto.ClienteGetDTO;
 import com.barbearia.barbearia.application.cliente.dto.ClienteMapper;
 import com.barbearia.barbearia.application.cliente.dto.ClientePostDTO;
+import com.barbearia.barbearia.domain.cliente.exceptions.ClienteJaCadastrado;
 import com.barbearia.barbearia.infraestrutura.repository.ClienteRepositoryJpa;
 
 @Service
@@ -22,10 +23,11 @@ public class ClienteService {
 	
 	public ClienteGetDTO cadastrarCliente(ClientePostDTO clientePost) throws Exception {
 		Optional<Cliente> clienteEncontrado = clienteRepositoryJpa.findByEmail(ClienteMapper.toEntity(clientePost).getEmail());
-		
 		if(clienteEncontrado.isPresent()) {
-			throw new Exception("Email já cadastrado.");
+			Cliente cliente = ClienteMapper.toEntity(clientePost);
+			throw new ClienteJaCadastrado(cliente.getEmail());
 		}
+		
 		Cliente cliente = ClienteMapper.toEntity(clientePost);
 		clienteRepositoryJpa.save(cliente);
 		return ClienteMapper.toDTO(cliente);

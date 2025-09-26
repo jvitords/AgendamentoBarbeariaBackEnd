@@ -1,0 +1,5 @@
+package com.barbearia.barbearia.web.exceptionshandler.cliente;
+
+public class ClienteExceptions {
+
+}

@@ -1,0 +1,17 @@
+package com.barbearia.barbearia.web.exceptionshandler.cliente;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.barbearia.barbearia.domain.cliente.exceptions.ClienteJaCadastrado;
+
+@RestControllerAdvice
+public class ClienteExceptionsHandler {
+	
+	@ExceptionHandler(ClienteJaCadastrado.class)
+	public ResponseEntity<String> emailJaCadastrado(ClienteJaCadastrado exception){
+		return ResponseEntity.badRequest().body( "message", exception.getMessage());
+		
+	}
+}
