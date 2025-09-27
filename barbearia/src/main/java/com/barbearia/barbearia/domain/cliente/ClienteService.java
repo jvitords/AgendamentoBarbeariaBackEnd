@@ -27,7 +27,7 @@ public class ClienteService {
 			Cliente cliente = ClienteMapper.toEntity(clientePost);
 			throw new ClienteJaCadastrado(cliente.getEmail());
 		}
-		
+
 		Cliente cliente = ClienteMapper.toEntity(clientePost);
 		clienteRepositoryJpa.save(cliente);
 		return ClienteMapper.toDTO(cliente);

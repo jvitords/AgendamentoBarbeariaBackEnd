@@ -1,0 +1,74 @@
+package com.barbearia.barbearia.web;
+
+import java.util.Map;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.barbearia.barbearia.domain.barbearia.Barbearia;
+import com.barbearia.barbearia.domain.cliente.Cliente;
+import com.barbearia.barbearia.infraestrutura.repository.BarbeariaRepositoryJpa;
+import com.barbearia.barbearia.infraestrutura.repository.ClienteRepositoryJpa;
+import com.barbearia.barbearia.infraestrutura.security.JwtService;
+
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+
+    private final ClienteRepositoryJpa clienteRepository;
+    private final BarbeariaRepositoryJpa barbeariaRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+
+    public AuthController(ClienteRepositoryJpa clienteRepository,
+                          BarbeariaRepositoryJpa barbeariaRepository,
+                          PasswordEncoder passwordEncoder,
+                          JwtService jwtService) {
+        this.clienteRepository = clienteRepository;
+        this.barbeariaRepository = barbeariaRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String password = body.get("password");
+
+        Cliente cliente = clienteRepository.findByEmail(email).orElse(null);
+        Barbearia barbearia = barbeariaRepository.findByEmail(email).orElse(null);
+        String token = null;
+
+        if (cliente != null && passwordEncoder.matches(password, cliente.getPassword())) {
+            token = jwtService.gerarToken(cliente.getId(), cliente.getEmail(), cliente.getRoles(), cliente.getTipo());
+        } else if (barbearia != null && passwordEncoder.matches(password, barbearia.getPassword())) {
+            token = jwtService.gerarToken(barbearia.getId(), barbearia.getEmail(), barbearia.getRoles(), barbearia.getTipo());
+        }
+
+        if (token != null) {
+            ResponseCookie jwtCookie = ResponseCookie.from("jwt", token)
+                    .httpOnly(true)
+                    .secure(true) // só HTTPS
+                    .path("/")
+                    .maxAge(60 * 60) // 1 hora
+                    .sameSite("Strict")
+                    .build();
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                    .body(Map.of("message", "Login realizado com sucesso"));
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "Credenciais inválidas"));
+    }
+
+}
+

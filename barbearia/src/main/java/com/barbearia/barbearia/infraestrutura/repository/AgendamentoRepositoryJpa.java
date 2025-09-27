@@ -3,8 +3,7 @@ package com.barbearia.barbearia.infraestrutura.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.barbearia.barbearia.domain.agendamento.Agendamento;
-import com.barbearia.barbearia.domain.agendamento.AgendamentoRepository;
 
-public interface AgendamentoRepositoryJpa extends JpaRepository<Agendamento, Long>, AgendamentoRepository{
+public interface AgendamentoRepositoryJpa extends JpaRepository<Agendamento, Long>{
 
 }

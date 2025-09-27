@@ -1,6 +1,5 @@
 package com.barbearia.barbearia.web.exceptionshandler.cliente;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;

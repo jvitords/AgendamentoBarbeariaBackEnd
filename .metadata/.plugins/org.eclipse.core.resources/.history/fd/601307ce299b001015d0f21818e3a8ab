@@ -1,0 +1,7 @@
+package com.barbearia.barbearia.domain.cliente;
+
+public enum Roles {
+	ADMIN,
+	CLIENTE,
+	BARBEARIA
+}

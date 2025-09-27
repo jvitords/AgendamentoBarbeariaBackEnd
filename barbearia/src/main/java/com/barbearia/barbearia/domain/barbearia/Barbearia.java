@@ -1,12 +1,17 @@
 package com.barbearia.barbearia.domain.barbearia;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import com.barbearia.barbearia.domain.Tipo;
 import com.barbearia.barbearia.domain.agendamento.Agendamento;
+import com.barbearia.barbearia.domain.cliente.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -29,17 +34,25 @@ public class Barbearia {
     private Long id;
     private String nome;
     private String endereco;
+    private String email;
+    private String password;
     private String telefone;
+    
+    private Tipo tipo;
     
     @JsonIgnore
     @OneToMany(mappedBy = "barbearia", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) 
     // cascade: as ações em barbearia serã propagadas para os agendamentos, orphanRemoval: se um agendamento for excluído, irá ser apagado no banco tbm, fetch.Lazy: Só irá carregar a lista de agendamentos se ela for chamada
     private List<Agendamento> listaDeAgendamentos = new ArrayList<>();
 
+    @ElementCollection(fetch = FetchType.EAGER) // cria uma nova tabela com os roles e eles serão carregados junto com username e password pelo spring
+    private Set<Roles> roles = new HashSet<>();
+
 
     public Barbearia(String nome, String endereco, String telefone) {
         this.nome = nome;
         this.endereco = endereco;
         this.telefone = telefone;
+        this.tipo = Tipo.BARBEARIA;
     }
 }

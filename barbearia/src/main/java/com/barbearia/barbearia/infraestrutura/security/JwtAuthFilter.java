@@ -1,0 +1,79 @@
+package com.barbearia.barbearia.infraestrutura.security;
+
+import java.io.IOException; 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.barbearia.barbearia.infraestrutura.repository.BarbeariaRepositoryJpa;
+import com.barbearia.barbearia.infraestrutura.repository.ClienteRepositoryJpa;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@Component
+public class JwtAuthFilter extends OncePerRequestFilter {
+
+	@Autowired
+    private JwtService jwtService;
+	@Autowired
+    private ClienteRepositoryJpa clienteRepository;
+	@Autowired
+    private BarbeariaRepositoryJpa barbeariaRepository;
+
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            Optional<Cookie> jwtCookie = Arrays.stream(cookies)
+                    .filter(c -> "jwt".equals(c.getName())) // nome do cookie
+                    .findFirst();
+
+            if (jwtCookie.isPresent()) {
+                String jwt = jwtCookie.get().getValue();
+
+                if (jwtService.isTokenValid(jwt)) {
+                    String email = jwtService.extractUsername(jwt);
+                    String tipo = jwtService.extractTipo(jwt);
+                    Set<String> roles = jwtService.extractRoles(jwt);
+
+                    Object usuario = null;
+
+                    if ("CLIENTE".equals(tipo)) {
+                        usuario = clienteRepository.findByEmail(email).orElse(null);
+                    } else if ("BARBEARIA".equals(tipo)) {
+                        usuario = barbeariaRepository.findByEmail(email).orElse(null);
+                    }
+
+                    if (usuario != null) {
+                        List<SimpleGrantedAuthority> authorities = roles.stream()
+                                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                                .toList();
+
+                        UsernamePasswordAuthenticationToken authToken =
+                                new UsernamePasswordAuthenticationToken(usuario, null, authorities);
+
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                    }
+                }
+            }
+        }
+
+        filterChain.doFilter(request, response);
+    }
+}

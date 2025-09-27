@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.barbearia.barbearia.application.cliente.RegistrarClienteHandler;
+import com.barbearia.barbearia.application.cliente.ClienteHandler;
 import com.barbearia.barbearia.application.cliente.dto.ClienteGetDTO;
 import com.barbearia.barbearia.application.cliente.dto.ClientePostDTO;
 
@@ -18,11 +18,10 @@ import jakarta.validation.Valid;
 public class ClienteController {
 	
 	@Autowired
-	private RegistrarClienteHandler registrarClienteHandler;
+	private ClienteHandler clienteHandler;
 	
 	@PostMapping(value = "/cadastrar")
 	public ResponseEntity<ClienteGetDTO> cadastrarUsuario(@Valid @RequestBody ClientePostDTO cliente) throws Exception{
-	
-		return ResponseEntity.ok(registrarClienteHandler.cadastrarNovoUsuario(cliente));
+		return ResponseEntity.ok(clienteHandler.cadastrarNovoUsuario(cliente));
 	}
 }

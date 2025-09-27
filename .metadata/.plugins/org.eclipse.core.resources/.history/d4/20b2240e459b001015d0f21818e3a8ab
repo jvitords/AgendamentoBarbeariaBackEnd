@@ -1,0 +1,5 @@
+package com.barbearia.barbearia.domain;
+
+public enum Tipo {
+	CLIENTE, ADMIN
+}
