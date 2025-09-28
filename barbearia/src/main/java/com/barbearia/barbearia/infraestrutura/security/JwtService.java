@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.barbearia.barbearia.domain.Tipo;
@@ -16,7 +17,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class JwtService {
-    private final String SECRET_KEY = "minha_chave_secreta_supersegura";
+
+	@Value("${jwt.secret}")
+	private String SECRET_KEY;
 
     public String gerarToken(Long id, String email, Set<Roles> roles, Tipo tipo) {
         return Jwts.builder()

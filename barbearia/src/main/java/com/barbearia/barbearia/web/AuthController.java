@@ -2,6 +2,7 @@ package com.barbearia.barbearia.web;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -12,35 +13,33 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.barbearia.barbearia.application.UsuarioLogin;
 import com.barbearia.barbearia.domain.barbearia.Barbearia;
 import com.barbearia.barbearia.domain.cliente.Cliente;
 import com.barbearia.barbearia.infraestrutura.repository.BarbeariaRepositoryJpa;
 import com.barbearia.barbearia.infraestrutura.repository.ClienteRepositoryJpa;
 import com.barbearia.barbearia.infraestrutura.security.JwtService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final ClienteRepositoryJpa clienteRepository;
-    private final BarbeariaRepositoryJpa barbeariaRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+	@Autowired
+    private ClienteRepositoryJpa clienteRepository;
+	@Autowired
+    private BarbeariaRepositoryJpa barbeariaRepository;
+	@Autowired
+    private PasswordEncoder passwordEncoder;
+	@Autowired
+    private JwtService jwtService;
 
-    public AuthController(ClienteRepositoryJpa clienteRepository,
-                          BarbeariaRepositoryJpa barbeariaRepository,
-                          PasswordEncoder passwordEncoder,
-                          JwtService jwtService) {
-        this.clienteRepository = clienteRepository;
-        this.barbeariaRepository = barbeariaRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
-    }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
-        String email = body.get("email");
-        String password = body.get("password");
+    public ResponseEntity<?> login(@Valid @RequestBody UsuarioLogin usuario) {
+        String email = usuario.email();
+        String password = usuario.password();
 
         Cliente cliente = clienteRepository.findByEmail(email).orElse(null);
         Barbearia barbearia = barbeariaRepository.findByEmail(email).orElse(null);
@@ -64,6 +63,11 @@ public class AuthController {
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                     .body(Map.of("message", "Login realizado com sucesso"));
+        }
+        
+        if(cliente == null) {
+        	return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Não existe usuário com esse email."));
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

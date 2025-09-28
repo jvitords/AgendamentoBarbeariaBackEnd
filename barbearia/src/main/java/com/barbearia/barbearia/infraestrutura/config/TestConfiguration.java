@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.barbearia.barbearia.domain.Tipo;
 import com.barbearia.barbearia.domain.agendamento.Agendamento;
 import com.barbearia.barbearia.domain.barbearia.Barbearia;
 import com.barbearia.barbearia.domain.barbearia.Servico;
@@ -28,14 +30,16 @@ public class TestConfiguration implements CommandLineRunner{
     private ServicoRepositoryJpa servicoRepository;
     @Autowired
     private AgendamentoRepositoryJpa agendamentoRepository;
+    @Autowired
+    private PasswordEncoder encoder;
 	
     @Override
     public void run(String... args) throws Exception {
 
         Cliente cliente1 = new Cliente("João Vitor", "joao@email.com", "99999-0000");
-        cliente1.setPassword("senha");
+        cliente1.setPassword(encoder.encode("senha"));
         Cliente cliente2 = new Cliente("Maria Silva", "maria@email.com", "98888-1111");
-        cliente2.setPassword("senha");
+        cliente2.setPassword(encoder.encode("senha"));
         clienteRepository.saveAll(List.of(cliente1, cliente2));
 
         Barbearia barbearia1 = new Barbearia("Barbearia Estilo", "Rua A, 123", "3333-4444");

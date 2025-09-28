@@ -7,8 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import com.barbearia.barbearia.domain.cliente.Cliente;
 
+import jakarta.validation.constraints.Email;
+
 @Repository
 public interface ClienteRepositoryJpa extends JpaRepository<Cliente, Long>{
 	
 	Optional<Cliente> findByEmail(String emailDoCliente);
+
+	boolean existsByEmail(String email);
 }

@@ -9,9 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.barbearia.barbearia.application.cliente.ClienteHandler;
 import com.barbearia.barbearia.application.cliente.dto.ClienteGetDTO;
+import com.barbearia.barbearia.application.cliente.dto.ClienteMapper;
 import com.barbearia.barbearia.application.cliente.dto.ClientePostDTO;
+import com.barbearia.barbearia.application.cliente.dto.ClientePutDTO;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/cliente")
@@ -24,4 +28,11 @@ public class ClienteController {
 	public ResponseEntity<ClienteGetDTO> cadastrarUsuario(@Valid @RequestBody ClientePostDTO cliente) throws Exception{
 		return ResponseEntity.ok(clienteHandler.cadastrarNovoUsuario(cliente));
 	}
+	
+	@PutMapping("/atualizarDados")
+	public ResponseEntity<ClienteGetDTO> putMethodName(@Valid @RequestBody ClientePutDTO entity) {
+		ClienteGetDTO clienteGetDTO = clienteHandler.atualizarDados(entity);
+		return ResponseEntity.ok().body(clienteGetDTO);
+	}
+	
 }

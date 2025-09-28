@@ -1,0 +1,9 @@
+package com.barbearia.barbearia.application.cliente.dto;
+
+public record ClientePutDTO(
+		 String nome,
+		 String telefone,
+		 String email
+		) 
+
+{}
