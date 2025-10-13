@@ -60,8 +60,8 @@ public class ClienteHandler {
 	    }
 
 	    // Extrair email do token
-	    String emailDoUsuarioLogado = jwtService.extractUsername(token);
+	    Long idDoUsuarioLogado = jwtService.extractId(token);
 		
-		return clienteService.atualizarDados(emailDoUsuarioLogado, clientePut);
+		return clienteService.atualizarDados(idDoUsuarioLogado, clientePut);
 	}
 }

@@ -1,9 +1,0 @@
-package com.barbearia.barbearia.domain.cliente;
-
-import java.util.List;
-
-public interface ClienteRepository {
-
-	void saveAll(List<Cliente> );
-
-}

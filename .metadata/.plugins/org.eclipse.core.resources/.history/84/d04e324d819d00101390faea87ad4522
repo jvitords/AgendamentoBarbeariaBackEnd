@@ -1,0 +1,27 @@
+package com.barbearia.barbearia.web;
+
+@RestController
+@RequestMapping("/barbearias")
+public class BarbeariaController {
+
+    private final EnderecoService enderecoService;
+    private final BarbeariaRepository barbeariaRepository;
+
+    public BarbeariaController(EnderecoService enderecoService, BarbeariaRepository barbeariaRepository) {
+        this.enderecoService = enderecoService;
+        this.barbeariaRepository = barbeariaRepository;
+    }
+
+    @PostMapping
+    public Barbearia criar(@RequestParam String nome,
+                            @RequestParam String cep,
+                            @RequestParam String email,
+                            @RequestParam String telefone) {
+        Endereco endereco = enderecoService.buscarEnderecoPorCep(cep);
+
+        Barbearia barbearia = new Barbearia(nome, endereco, email, telefone);
+        barbearia.setRoles(Roles.ADMIN); // exemplo fixo
+
+        return barbeariaRepository.save(barbearia);
+    }
+}

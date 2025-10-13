@@ -10,7 +10,6 @@ import com.barbearia.barbearia.application.cliente.dto.ClienteGetDTO;
 import com.barbearia.barbearia.application.cliente.dto.ClienteMapper;
 import com.barbearia.barbearia.application.cliente.dto.ClientePostDTO;
 import com.barbearia.barbearia.application.cliente.dto.ClientePutDTO;
-import com.barbearia.barbearia.domain.Tipo;
 import com.barbearia.barbearia.domain.cliente.exceptions.ClienteJaCadastrado;
 import com.barbearia.barbearia.infraestrutura.repository.ClienteRepositoryJpa;
 
@@ -35,13 +34,12 @@ public class ClienteService {
 
 		Cliente cliente = ClienteMapper.toEntity(clientePost);
 		cliente.setPassword(passwordEncoder.encode(cliente.getPassword()));
-		cliente.setTipo(Tipo.CLIENTE);
 		clienteRepositoryJpa.save(cliente);
 		return ClienteMapper.toDTO(cliente);
 	}
 	
-	public ClienteGetDTO atualizarDados(String emailDoUsuarioLogado, ClientePutDTO clientePutDTO) {
-	    Cliente cliente = clienteRepositoryJpa.findByEmail(emailDoUsuarioLogado)
+	public ClienteGetDTO atualizarDados(Long idDoUsuarioLogado, ClientePutDTO clientePutDTO) {
+	    Cliente cliente = clienteRepositoryJpa.findById(idDoUsuarioLogado)
 	            .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
 	    boolean nomeBlank = clientePutDTO.nome() == null || clientePutDTO.nome().isBlank();

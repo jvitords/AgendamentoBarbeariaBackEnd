@@ -1,8 +1,0 @@
-package com.barbearia.barbearia.domain.cliente;
-
-import jakarta.persistence.Entity;
-
-@Entity
-public class Cliente {
-
-}

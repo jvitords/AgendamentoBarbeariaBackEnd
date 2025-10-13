@@ -1,8 +1,0 @@
-package com.barbearia.barbearia.web.exceptionshandler.cliente;
-
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-@RestControllerAdvice
-public class ClienteExceptionsHandler {
-
-}

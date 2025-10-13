@@ -1,0 +1,20 @@
+package com.barbearia.barbearia.domain.barbearia.endereco;
+
+import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter @Setter
+@AllArgsConstructor @NoArgsConstructor
+@Embeddable
+public class Endereco {
+    private String cep;
+    private String logradouro; // rua
+    private String bairro;
+    private String localidade; // cidade
+    private String uf;         // estado
+    private String numero;
+
+}

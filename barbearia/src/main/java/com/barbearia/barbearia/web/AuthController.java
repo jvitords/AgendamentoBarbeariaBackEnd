@@ -46,9 +46,9 @@ public class AuthController {
         String token = null;
 
         if (cliente != null && passwordEncoder.matches(password, cliente.getPassword())) {
-            token = jwtService.gerarToken(cliente.getId(), cliente.getEmail(), cliente.getRoles(), cliente.getTipo());
+            token = jwtService.gerarToken(cliente.getId(), cliente.getEmail(), cliente.getRoles());
         } else if (barbearia != null && passwordEncoder.matches(password, barbearia.getPassword())) {
-            token = jwtService.gerarToken(barbearia.getId(), barbearia.getEmail(), barbearia.getRoles(), barbearia.getTipo());
+            token = jwtService.gerarToken(barbearia.getId(), barbearia.getEmail(), barbearia.getRoles());
         }
 
         if (token != null) {

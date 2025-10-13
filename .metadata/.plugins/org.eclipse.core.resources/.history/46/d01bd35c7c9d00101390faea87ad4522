@@ -1,0 +1,85 @@
+package com.barbearia.barbearia.infraestrutura.config;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.barbearia.barbearia.domain.Tipo;
+import com.barbearia.barbearia.domain.agendamento.Agendamento;
+import com.barbearia.barbearia.domain.barbearia.Barbearia;
+import com.barbearia.barbearia.domain.barbearia.Servico;
+import com.barbearia.barbearia.domain.barbearia.endereco.Endereco;
+import com.barbearia.barbearia.domain.cliente.Cliente;
+import com.barbearia.barbearia.infraestrutura.repository.AgendamentoRepositoryJpa;
+import com.barbearia.barbearia.infraestrutura.repository.BarbeariaRepositoryJpa;
+import com.barbearia.barbearia.infraestrutura.repository.ClienteRepositoryJpa;
+import com.barbearia.barbearia.infraestrutura.repository.ServicoRepositoryJpa;
+
+
+@Configuration
+public class TestConfiguration implements CommandLineRunner{
+	
+    @Autowired
+    private ClienteRepositoryJpa clienteRepository;
+    @Autowired
+    private BarbeariaRepositoryJpa barbeariaRepository;
+    @Autowired
+    private ServicoRepositoryJpa servicoRepository;
+    @Autowired
+    private AgendamentoRepositoryJpa agendamentoRepository;
+    @Autowired
+    private PasswordEncoder encoder;
+	
+    @Override
+    public void run(String... args) throws Exception {
+
+        Cliente cliente1 = new Cliente("João Vitor", "joao@email.com", "99999-0000");
+        cliente1.setPassword(encoder.encode("senha"));
+        Cliente cliente2 = new Cliente("Maria Silva", "maria@email.com", "98888-1111");
+        cliente2.setPassword(encoder.encode("senha"));
+        clienteRepository.saveAll(List.of(cliente1, cliente2));
+        
+        
+        
+        Barbearia barbearia1 = new Barbearia("Barbearia Estilo Fino",
+        	    new Endereco("01001-000", "Praça da Sé", "Sé", "São Paulo", "SP"),
+        	    "estilofino@barbearia.com",
+        	    "(11) 98765-4321"
+        	);
+        Barbearia barbearia2 = new Barbearia(
+        	    "Barbearia Clássica",
+        	    new Endereco("20040-020", "Rua do Ouvidor", "Centro", "Rio de Janeiro", "RJ"),
+        	    "classica@barbearia.com",
+        	    "(21) 99888-7766"
+        	);
+
+        	Barbearia barbearia3 = new Barbearia(
+        	    "Barbearia Dom Bigode",
+        	    new Endereco("30140-110", "Avenida Afonso Pena", "Funcionários", "Belo Horizonte", "MG"),
+        	    "dombigode@barbearia.com",
+        	    "(31) 97777-6655"
+        	);
+        barbeariaRepository.saveAll(List.of(barbearia1, barbearia2, barbearia3));
+
+        Servico servico1 = new Servico("Corte de cabelo", 30.0, 30);
+        Servico servico2 = new Servico("Barba", 20.0, 20);
+        Servico servico3 = new Servico("Corte + Barba", 45.0, 50);
+        servicoRepository.saveAll(List.of(servico1, servico2, servico3));
+
+        Agendamento agendamento1 = new Agendamento(LocalDateTime.of(2025, 9, 25, 10, 0));
+        agendamento1.setCliente(cliente1);
+        agendamento1.setBarbearia(barbearia1);
+        agendamento1.getServicos().add(servico1); // Corte de cabelo
+        agendamento1.getServicos().add(servico2); // Barba
+
+        Agendamento agendamento2 = new Agendamento(LocalDateTime.of(2025, 9, 25, 14, 0));
+        agendamento2.setCliente(cliente2);
+        agendamento2.setBarbearia(barbearia2);
+        agendamento2.getServicos().add(servico3); // Corte + Barba
+        agendamentoRepository.saveAll(List.of(agendamento1, agendamento2));
+    }
+}

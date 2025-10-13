@@ -26,7 +26,7 @@ public class SecurityConfig {
     	http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**", "/h2-console/**").permitAll()
+                        .requestMatchers("/**", "/h2-console/**", "barbearia/cadastro").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

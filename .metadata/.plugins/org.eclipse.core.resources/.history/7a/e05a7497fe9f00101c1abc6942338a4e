@@ -1,0 +1,5 @@
+package com.barbearia.barbearia.application.barbearia.dto;
+
+public record BarbeariaPostDTO() {
+
+}

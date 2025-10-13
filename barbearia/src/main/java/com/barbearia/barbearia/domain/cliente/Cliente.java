@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.barbearia.barbearia.domain.Tipo;
 import com.barbearia.barbearia.domain.agendamento.Agendamento;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,20 +40,16 @@ public class Cliente implements Serializable{
 	private String email;
 	private String password;
 	
-	private Tipo tipo;
-	
 	@JsonIgnore
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	List<Agendamento> listaDeAgendamentos = new ArrayList<>();
 	
-	@ElementCollection(fetch = FetchType.EAGER) // cria uma nova tabela com os roles e eles serão carregados junto com username e password pelo spring
-    private Set<Roles> roles = new HashSet<>();
+    private Roles roles;
 
 
     public Cliente(String nome, String email, String telefone) {
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
-        this.tipo = Tipo.CLIENTE;
     }
 }

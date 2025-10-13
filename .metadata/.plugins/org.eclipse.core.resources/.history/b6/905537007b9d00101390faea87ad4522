@@ -1,0 +1,8 @@
+package com.barbearia.barbearia.domain.barbearia.endereco;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class EnderecoService {
+
+}

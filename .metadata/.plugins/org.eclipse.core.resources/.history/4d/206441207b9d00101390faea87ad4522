@@ -1,0 +1,9 @@
+package com.barbearia.barbearia.domain.barbearia.endereco;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class Endereco {
+	
+	private String url = "https://viacep.com.br/ws/{CEP}/json/";
+}

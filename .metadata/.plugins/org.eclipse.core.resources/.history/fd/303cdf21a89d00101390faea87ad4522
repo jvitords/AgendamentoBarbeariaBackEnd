@@ -1,0 +1,42 @@
+package com.barbearia.barbearia.web;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.barbearia.barbearia.domain.barbearia.Barbearia;
+import com.barbearia.barbearia.domain.barbearia.endereco.Endereco;
+import com.barbearia.barbearia.domain.barbearia.endereco.EnderecoService;
+import com.barbearia.barbearia.domain.cliente.Roles;
+import com.barbearia.barbearia.infraestrutura.repository.BarbeariaRepositoryJpa;
+
+@RestController
+@RequestMapping("/barbearia")
+public class BarbeariaController {
+
+	@Autowired
+    private EnderecoService enderecoService;
+	@Autowired
+    private BarbeariaRepositoryJpa barbeariaRepository;
+
+    
+    @PostMapping("/cadastro")
+    public ResponseEntity<Barbearia> criar(@RequestBody String nome,
+            @RequestParam String cep,
+            @RequestBody String email,
+            @RequestBody String senha,
+            @RequestBody String telefone) {
+    	Endereco endereco = enderecoService.buscarEnderecoPorCep(cep);
+
+    	Barbearia barbearia = new Barbearia(nome, endereco, email, senha, telefone);
+    	barbearia.setRoles(Roles.BARBEARIA); // exemplo fixo
+
+    	barbeariaRepository.save(barbearia);
+
+    	return ResponseEntity.ok().body(barbearia);
+    }
+}

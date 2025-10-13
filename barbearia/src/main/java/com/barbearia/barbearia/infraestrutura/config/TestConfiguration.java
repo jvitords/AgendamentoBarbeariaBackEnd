@@ -8,11 +8,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.barbearia.barbearia.domain.Tipo;
 import com.barbearia.barbearia.domain.agendamento.Agendamento;
 import com.barbearia.barbearia.domain.barbearia.Barbearia;
 import com.barbearia.barbearia.domain.barbearia.Servico;
+import com.barbearia.barbearia.domain.barbearia.endereco.Endereco;
 import com.barbearia.barbearia.domain.cliente.Cliente;
+import com.barbearia.barbearia.domain.cliente.Roles;
 import com.barbearia.barbearia.infraestrutura.repository.AgendamentoRepositoryJpa;
 import com.barbearia.barbearia.infraestrutura.repository.BarbeariaRepositoryJpa;
 import com.barbearia.barbearia.infraestrutura.repository.ClienteRepositoryJpa;
@@ -38,13 +39,35 @@ public class TestConfiguration implements CommandLineRunner{
 
         Cliente cliente1 = new Cliente("João Vitor", "joao@email.com", "99999-0000");
         cliente1.setPassword(encoder.encode("senha"));
+        cliente1.setRoles(Roles.CLIENTE);
         Cliente cliente2 = new Cliente("Maria Silva", "maria@email.com", "98888-1111");
         cliente2.setPassword(encoder.encode("senha"));
+        cliente2.setRoles(Roles.CLIENTE);
         clienteRepository.saveAll(List.of(cliente1, cliente2));
-
-        Barbearia barbearia1 = new Barbearia("Barbearia Estilo", "Rua A, 123", "3333-4444");
-        Barbearia barbearia2 = new Barbearia("Barbearia Premium", "Av. B, 456", "5555-6666");
-        barbeariaRepository.saveAll(List.of(barbearia1, barbearia2));
+        
+        
+        
+        Barbearia barbearia1 = new Barbearia("Barbearia Estilo Fino",
+        	    new Endereco("01001-000", "Praça da Sé", "231", "Sé", "São Paulo", "SP"),
+        	    "estilofino@barbearia.com", "senha",
+        	    "11987654321"
+        	);
+        barbearia1.setRoles(Roles.BARBEARIA);
+        Barbearia barbearia2 = new Barbearia(
+        	    "Barbearia Clássica",
+        	    new Endereco("20040-020", "Rua do Ouvidor", "874", "Centro", "Rio de Janeiro", "RJ"),
+        	    "classica@barbearia.com", "senha",
+        	    "21998887766"
+        	);
+        barbearia2.setRoles(Roles.BARBEARIA);
+        Barbearia barbearia3 = new Barbearia(
+        	    "Barbearia Dom Bigode",
+        	    new Endereco("30140-110", "Avenida Afonso Pena", "599", "Funcionários", "Belo Horizonte", "MG"),
+        	    "dombigode@barbearia.com", "senha",
+        	    "31977776655"
+        	);
+        barbearia3.setRoles(Roles.BARBEARIA);
+        barbeariaRepository.saveAll(List.of(barbearia1, barbearia2, barbearia3));
 
         Servico servico1 = new Servico("Corte de cabelo", 30.0, 30);
         Servico servico2 = new Servico("Barba", 20.0, 20);
